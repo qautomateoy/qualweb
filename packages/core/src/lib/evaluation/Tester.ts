@@ -35,27 +35,30 @@ export abstract class Tester {
     }
   }
 
-  public configureIncluded(assertions?: string[]): void {
-    if (this.assertions?.size !== 0 && assertions && assertions.length !== 0) {
-      const _assertions = assertions?.map((a) =>
-        a.toLowerCase().startsWith('qw') ? a.toUpperCase().trim() : a.trim()
-      );
-      for (const [key, assertion] of this.assertions) {
-        this.toExecute[key] = !!(
-          _assertions?.includes(assertion.getCode()) || _assertions?.includes(assertion.getMapping())
-        );
+  private configureAssertions(assertions?: string[], include = false): void {
+    if (!assertions || assertions.length === 0) {
+      return;
+    }
+
+    for (const code of assertions) {
+      for (const [key, ruleObject] of this.assertions) {
+        if (ruleObject.getCode() === code || ruleObject.getMapping() === code) {
+          this.toExecute[key] = include;
+        }
       }
     }
   }
 
-  public configureExcluded(assertions?: string[]): void {
-    if (assertions && assertions.length !== 0) {
-      const _assertions = assertions.map((a) => (a.toLowerCase().startsWith('qw') ? a.toUpperCase().trim() : a.trim()));
-      for (const [key, assertion] of this.assertions) {
-        this.toExecute[key] =
-          !_assertions.includes(assertion.getCode()) && !_assertions.includes(assertion.getMapping());
-      }
-    }
+  public configureIncluded(includeAssertions?: string[]): void {
+    this.configureAssertions(includeAssertions, true);
+  }
+
+  public configureExcluded(excludeAssertions?: string[]): void {
+    this.configureAssertions(excludeAssertions, false);
+  }
+
+  public getAllToExecute(): { [key: string]: boolean } {
+    return this.toExecute;
   }
 
   public resetConfiguration(): void {

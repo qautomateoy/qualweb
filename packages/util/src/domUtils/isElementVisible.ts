@@ -17,7 +17,7 @@ function isElementVisible(element: QWElement): boolean {
     opaqueParent = isParentOpaque(element.getElementParent()!);
   }
 
-  return !(offScreen || hasOnePixelHeight || cssHidden || !hasContent || (opacity && opacity === 0) || opaqueParent);
+  return !(offScreen || hasOnePixelHeight || cssHidden || !hasContent || (opacity != undefined && opacity === 0) || opaqueParent);
 }
 
 function isParentOpaque(element: QWElement): boolean {
@@ -26,7 +26,7 @@ function isParentOpaque(element: QWElement): boolean {
   if (opacityProperty) {
     opacity = parseInt(opacityProperty);
   }
-  if (opacity && opacity === 0) {
+  if (opacity != undefined && opacity === 0) {
     return true;
   }
   if (element.getElementParent()) {
