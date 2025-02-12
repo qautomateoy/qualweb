@@ -436,7 +436,15 @@
         "element": "*",
         "attributes": ["role"]
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "4.1.2",
+          "level": "A",
+          "principle": "Robust",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#name-role-value"
+        }
+      ],
       "related": ["ARIA4", "G108"],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/674b10/",
       "type": ["ACTRule", "TestCase"],
@@ -550,7 +558,15 @@
         "element": "*",
         "attributes": "aria-*"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "4.1.2",
+          "level": "A",
+          "principle": "Robust",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#name-role-value"
+        }
+      ],
       "related": ["ARIA5"],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/5c01ea/",
       "type": ["ACTRule", "TestCase"],
@@ -590,7 +606,15 @@
         "element": "*",
         "attributes": "aria-*"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "4.1.2",
+          "level": "A",
+          "principle": "Robust",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#name-role-value"
+        }
+      ],
       "related": [],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/5f99a7/",
       "type": ["ACTRule", "TestCase"],
@@ -607,7 +631,15 @@
         "element": "*",
         "attributes": "role"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "4.1.2",
+          "level": "A",
+          "principle": "Robust",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#name-role-value"
+        }
+      ],
       "related": ["ARIA5"],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/4e8ab6/",
       "type": ["ACTRule", "TestCase"],
@@ -746,7 +778,15 @@
         "element": "*",
         "attributes": "aria-*"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "4.1.2",
+          "level": "A",
+          "principle": "Robust",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#name-role-value"
+        }
+      ],
       "related": [],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/6a7281/",
       "type": ["ACTRule", "TestCase"],
@@ -762,7 +802,15 @@
       "target": {
         "element": ["h1-h6", "*[role='heading']"]
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "2.4.6",
+          "level": "A",
+          "principle": "Operable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/headings-and-labels.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#headings-and-labels"
+        }
+      ],
       "related": ["H42"],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/ffd0e9/",
       "type": ["ACTRule", "TestCase"],
@@ -1001,7 +1049,15 @@
       "target": {
         "element": "[role='presentation'],[role='none'],[alt='']"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "1.3.1",
+          "level": "A",
+          "principle": "Perceivable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#info-and-relationships"
+        }
+      ],
       "related": [],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/46ca7f/",
       "type": ["ACTRule", "TestCase"],
@@ -1017,7 +1073,15 @@
       "target": {
         "element": "audio, video"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "1.4.2",
+          "level": "A",
+          "principle": "Perceivable",
+          "url": "https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-dis-audio.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#audio-control"
+        }
+      ],
       "related": ["G60"],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/aaa1bf/",
       "type": ["ACTRule", "TestCase"],
@@ -1033,7 +1097,15 @@
       "target": {
         "element": "audio, video"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "1.4.2",
+          "level": "A",
+          "principle": "Perceivable",
+          "url": "https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-dis-audio.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#audio-control"
+        }
+      ],
       "related": ["G170"],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/4c31df/",
       "type": ["ACTRule", "TestCase"],
@@ -1049,7 +1121,15 @@
       "target": {
         "element": "video"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "1.2.1",
+          "level": "A",
+          "principle": "Perceivable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/audio-only-and-video-only-prerecorded.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#audio-only-and-video-only-prerecorded"
+        }
+      ],
       "related": [],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/fd26cf/",
       "type": ["ACTRule", "TestCase"],
@@ -1065,7 +1145,15 @@
       "target": {
         "element": "video"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "1.2.1",
+          "level": "A",
+          "principle": "Perceivable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/audio-only-and-video-only-prerecorded.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#audio-only-and-video-only-prerecorded"
+        }
+      ],
       "related": ["G159"],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/ee13b5/",
       "type": ["ACTRule", "TestCase"],
@@ -1081,8 +1169,16 @@
       "target": {
         "element": "video"
       },
-      "success-criteria": [],
-      "related": ["G166"],
+      "success-criteria": [
+        {
+          "name": "1.2.1",
+          "level": "A",
+          "principle": "Perceivable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/audio-only-and-video-only-prerecorded.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#audio-only-and-video-only-prerecorded"
+        }
+      ],
+      "related": "[\"G166\"]",
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/d7ba54/",
       "type": ["ACTRule", "TestCase"],
       "a11yReq": []
@@ -1097,7 +1193,22 @@
       "target": {
         "element": "video"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "1.2.3",
+          "level": "A",
+          "principle": "Perceivable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/audio-description-or-media-alternative-prerecorded.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#audio-description-or-media-alternative-prerecorded"
+        },
+        {
+          "name": "1.2.5",
+          "level": "A",
+          "principle": "Perceivable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/audio-description-prerecorded.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#audio-description-prerecorded"
+        }
+      ],
       "related": ["G8", "G78", "G173"],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/1ea59c/",
       "type": ["ACTRule", "TestCase"],
@@ -1113,7 +1224,22 @@
       "target": {
         "element": "video"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "1.2.3",
+          "level": "A",
+          "principle": "Perceivable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/audio-description-or-media-alternative-prerecorded.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#audio-description-or-media-alternative-prerecorded"
+        },
+        {
+          "name": "1.2.5",
+          "level": "A",
+          "principle": "Perceivable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/audio-description-prerecorded.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#audio-description-prerecorded"
+        }
+      ],
       "related": [],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/ab4d13/",
       "type": ["ACTRule", "TestCase"],
@@ -1129,7 +1255,15 @@
       "target": {
         "element": "audio"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "1.2.1",
+          "level": "A",
+          "principle": "Perceivable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/audio-only-and-video-only-prerecorded.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#audio-only-and-video-only-prerecorded"
+        }
+      ],
       "related": [],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/2eb176/",
       "type": ["ACTRule", "TestCase"],
@@ -1145,7 +1279,15 @@
       "target": {
         "element": "audio"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "1.2.1",
+          "level": "A",
+          "principle": "Perceivable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/audio-only-and-video-only-prerecorded.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#audio-only-and-video-only-prerecorded"
+        }
+      ],
       "related": [],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/afb423/",
       "type": ["ACTRule", "TestCase"],
@@ -1161,7 +1303,15 @@
       "target": {
         "element": "video"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "1.2.2",
+          "level": "A",
+          "principle": "Perceivable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/captions-prerecorded.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#captions-prerecorded"
+        }
+      ],
       "related": ["G87", "G93", "H95"],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/f51b46/",
       "type": ["ACTRule", "TestCase"],
@@ -1225,7 +1375,15 @@
       "target": {
         "element": "html"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "1.3.1",
+          "level": "A",
+          "principle": "Perceivable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#info-and-relationships"
+        }
+      ],
       "related": [],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/b40fd1/",
       "type": ["ACTRule", "TestCase"],
@@ -1241,7 +1399,15 @@
       "target": {
         "element": "html"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "2.4.1",
+          "level": "A",
+          "principle": "Operable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/bypass-blocks.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#bypass-blocks"
+        }
+      ],
       "related": ["H69"],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/047fe0/",
       "type": ["ACTRule", "TestCase"],
@@ -1432,7 +1598,15 @@
       "target": {
         "element": "html"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "2.4.1",
+          "level": "A",
+          "principle": "Operable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/bypass-blocks.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#bypass-blocks"
+        }
+      ],
       "related": ["SCR28"],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/3e12e1/",
       "type": ["ACTRule", "TestCase"],
@@ -1448,7 +1622,15 @@
       "target": {
         "element": "html"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "2.4.1",
+          "level": "A",
+          "principle": "Operable",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/bypass-blocks.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#bypass-blocks"
+        }
+      ],
       "related": ["G1", "G123", "G124"],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/ye5d6e/",
       "type": ["ACTRule", "TestCase"],
@@ -1512,7 +1694,15 @@
       "target": {
         "element": "*[aria-controls]"
       },
-      "success-criteria": [],
+      "success-criteria": [
+        {
+          "name": "4.1.2",
+          "level": "A",
+          "principle": "Robust",
+          "url": "https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html",
+              "url_tr": "https://www.w3.org/TR/WCAG21/#name-role-value"
+        }
+      ],
       "related": ["ARIA5"],
       "url": "https://www.w3.org/WAI/standards-guidelines/act/rules/in6db8/",
       "type": ["ACTRule", "TestCase"],
