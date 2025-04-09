@@ -12,4 +12,8 @@ export class Cache {
   public exists(key: string): boolean {
     return this.cache.has(key);
   }
+
+  public clear(): void {
+    this.cache.clear();
+  }
 }
