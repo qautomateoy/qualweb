@@ -9,7 +9,8 @@
   },
   "scripts": {
     "release": "npm -ws run build && npx changeset publish && git push --follow-tags",
-    "release-snapshot": "npm run build && npx changeset version --snapshot next && npx changeset publish --tag next"
+    "release-snapshot": "npm run build && npx changeset version --snapshot next && npx changeset publish --tag next",
+    "qautomate": "npm -ws run build && npx shx cp ./packages/act-rules/dist/__webpack/act.bundle.js packages/act-rules/dist/__webpack/act.js && npx shx cp packages/util/dist/__webpack/util.bundle.js packages/util/dist/__webpack/util.js"
   },
   "keywords": [
     "qualweb",
