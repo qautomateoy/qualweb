@@ -43,7 +43,7 @@ class QW_ACT_R37 extends AtomicRule {
       if (disableWidget.getElementSelector() === elementSelectors) {
         return;
       }
-      // check if the element is a child of any of the disabledWidgets
+      // check if the element is a descendant of any of the disabledWidgets
       const children = disableWidget.getElementChildren();
       if (children) {
         for (const child of children) {
@@ -54,13 +54,19 @@ class QW_ACT_R37 extends AtomicRule {
       }
     }
 
-    const role = window.AccessibilityUtils.getElementRole(element);
-    if (role === 'group') {
-      const disable = element.getElementAttribute('disabled') !== null;
-      const ariaDisable = element.getElementAttribute('aria-disabled') !== null;
-      if (disable || ariaDisable) {
+    // Check if element itself or any ancestor is a disabled inheriting semantic widget or group
+    let currentElement: QWElement | null = element;
+    while (currentElement) {
+      const role = window.AccessibilityUtils.getElementRole(currentElement);
+      const isDisabled = currentElement.getElementAttribute('disabled') !== null || 
+                        currentElement.getElementAttribute('aria-disabled') === 'true';
+      
+      if (isDisabled && role) {
+        // If element or ancestor is disabled and has a semantic role (widget or group), exclude this text
         return;
       }
+      
+      currentElement = currentElement.getElementParent();
     }
 
     const test = new Test();

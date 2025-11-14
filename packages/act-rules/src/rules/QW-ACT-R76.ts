@@ -50,13 +50,19 @@ class QW_ACT_R76 extends AtomicRule {
       }
     }
 
-    const role = window.AccessibilityUtils.getElementRole(element);
-    if (role === 'group') {
-      const disable = element.getElementAttribute('disabled') !== null;
-      const ariaDisable = element.getElementAttribute('aria-disabled') !== null;
-      if (disable || ariaDisable) {
+    // Check if element itself or any ancestor is a disabled inheriting semantic widget or group
+    let currentElement: QWElement | null = element;
+    while (currentElement) {
+      const role = window.AccessibilityUtils.getElementRole(currentElement);
+      const isDisabled = currentElement.getElementAttribute('disabled') !== null || 
+                        currentElement.getElementAttribute('aria-disabled') === 'true';
+      
+      if (isDisabled && role) {
+        // If element or ancestor is disabled and has a semantic role (widget or group), exclude this text
         return;
       }
+      
+      currentElement = currentElement.getElementParent();
     }
 
     const fgColor = element.getElementStyleProperty('color', null);
