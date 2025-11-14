@@ -23,6 +23,13 @@ export class QWPage {
     this.processShadowDom();
   }
 
+  public clearCache(): void {
+    this.cache.clear();
+    this.extraDocuments.forEach((page: QWPage) => {
+      page.clearCache();
+    });
+  }
+
   public createQWElement(element: HTMLElement): QWElement {
     return new QWElement(element);
   }
