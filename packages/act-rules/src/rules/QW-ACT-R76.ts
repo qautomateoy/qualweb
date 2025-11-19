@@ -54,8 +54,7 @@ class QW_ACT_R76 extends AtomicRule {
     let currentElement: QWElement | null = element;
     while (currentElement) {
       const role = window.AccessibilityUtils.getElementRole(currentElement);
-      const isDisabled = currentElement.getElementAttribute('disabled') !== null || 
-                        currentElement.getElementAttribute('aria-disabled') === 'true';
+      const isDisabled = currentElement.getElementAttribute('disabled') !== null;
       
       if (isDisabled && role) {
         // If element or ancestor is disabled and has a semantic role (widget or group), exclude this text
