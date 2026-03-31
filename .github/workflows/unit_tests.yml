@@ -33,7 +33,7 @@ jobs:
       # "develop" when pulling from feature branches)
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v41
         with:
           write_output_files: true
 
