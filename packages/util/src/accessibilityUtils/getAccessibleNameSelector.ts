@@ -1,5 +1,6 @@
 import type { QWElement } from '@qualweb/qw-element';
 import { formElements, typesWithLabel } from './constants';
+import { cleanSVGAndNoneCode } from './getAccessibleNameRecursion';
 
 function getAccessibleNameSelector(element: QWElement): string | string[] | undefined {
   return getAccessibleNameRecursion(element, false, false);
@@ -21,7 +22,7 @@ function getAccessibleNameRecursion(
   if (ariaLabelBy !== null && !verifyAriaLabel(ariaLabelBy)) {
     ariaLabelBy = '';
   }
-  const ariaLabel = element.getElementAttribute('aria-label') ? [elementSelector] : null;
+  const ariaLabel = element.getElementAttribute('aria-label')?.trim() ? [elementSelector] : null;
   const attrType = element.getElementAttribute('type');
   const title = element.getElementAttribute('title') ? [elementSelector] : null;
   const alt = element.getElementAttribute('alt') ? [elementSelector] : null;
@@ -75,7 +76,8 @@ function getAccessibleNameRecursion(
     ((role === 'article' || role === 'generic' || role === 'paragraph' || !role) && recursion) ||
     name === 'label'
   ) {
-    AName = getFirstNotUndefined(...getTextFromCss(element, isWidget), title);
+    const selectors = getTextFromCss(element, isWidget);
+    AName = selectors.length > 0 ? selectors : getFirstNotUndefined(title);
   } else {
     AName = getFirstNotUndefined(title);
   }
@@ -170,15 +172,14 @@ function getAccessibleNameFromAriaLabelledBy(element: QWElement, ariaLabelId: st
 
 function getTextFromCss(element: QWElement, isWidget: boolean): Array<string> {
   const aNameList = getAccessibleNameFromChildren(element, isWidget);
-  const textValue = getConcatenatedText(element, []) ? element.getElementSelector() : null;
+  const generatedText = [':before', ':after'].some((pseudo) =>
+    cleanSVGAndNoneCode(element.getElementStyleProperty('content', pseudo)).replace(/["']/g, '').trim() !== ''
+  );
+  const textValue = element.getElementOwnText() || generatedText ? element.getElementSelector() : null;
 
   if (textValue) aNameList.push(textValue);
 
   return aNameList;
-}
-
-function getConcatenatedText(element: QWElement, aNames: Array<string>): string {
-  return element.concatANames(aNames);
 }
 
 function getAccessibleNameFromChildren(element: QWElement, isWidget: boolean): Array<string> {
@@ -191,9 +192,13 @@ function getAccessibleNameFromChildren(element: QWElement, isWidget: boolean): A
 
   if (children) {
     for (const child of children) {
+      const role = window.AccessibilityUtils.getElementRoleAName(child, '');
+      if (window.DomUtils.isElementHidden(child) || role === 'presentation' || role === 'none') {
+        continue;
+      }
       aName = getAccessibleNameRecursion(child, true, isWidget);
       if (aName) {
-        result.push(child.getElementSelector());
+        result.push(...(Array.isArray(aName) ? aName : [aName]));
       }
     }
   }

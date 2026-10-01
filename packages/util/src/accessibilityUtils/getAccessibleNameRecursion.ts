@@ -274,3 +274,4 @@ function verifyAriaLabel(ariaLabelBy: string, elementID: string | null) {
 }
 
 export default getAccessibleNameRecursion;
+export { cleanSVGAndNoneCode };
