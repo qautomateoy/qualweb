@@ -72,7 +72,7 @@ function getAccessibleNameRecursion(element: QWElement, recursion: boolean, isWi
     AName = '';
   } else if (
     allowNameFromContent ||
-    (((role && allowNameFromContent) || !role || role === 'generic' || role === 'paragraph') && recursion) ||
+    (((role && allowNameFromContent) || !role || role === 'generic' || role === 'paragraph' || role === 'article') && recursion) ||
     name === 'label'
   ) {
     AName = getFirstNotUndefined(getTextFromCss(element, isWidget), title);
