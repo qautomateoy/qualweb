@@ -1,0 +1,85 @@
+name: Release qautomate bundles
+
+on:
+  push:
+    branches: [qautomate]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.repository == 'qautomateoy/qualweb' && github.ref == 'refs/heads/qautomate'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout QualWeb
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build all packages
+        run: npm run build --workspaces
+
+      - name: Allow Puppeteer on the runner
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
+      - name: Test article accessible names and selector consumers
+        working-directory: packages/act-rules
+        run: npx --no-install mocha --no-config --require ts-node/register test/article-accessible-name.spec.ts
+
+      - name: Package extension bundles
+        shell: bash
+        run: |
+          mkdir -p .agents/tmp/qualweb-bundles
+          cp packages/act-rules/dist/__webpack/act.bundle.js .agents/tmp/qualweb-bundles/act.js
+          cp packages/util/dist/__webpack/util.bundle.js .agents/tmp/qualweb-bundles/util.js
+          cp packages/qw-page/dist/qw-page.bundle.js .agents/tmp/qualweb-bundles/qwPage.js
+          cp packages/wcag-techniques/dist/__webpack/wcag.bundle.js .agents/tmp/qualweb-bundles/wcag.js
+          for bundle in act util qwPage wcag; do
+            test -s ".agents/tmp/qualweb-bundles/$bundle.js"
+            node --check ".agents/tmp/qualweb-bundles/$bundle.js"
+          done
+          cp LICENSE .agents/tmp/qualweb-bundles/LICENSE
+          find packages/act-rules/dist/__webpack packages/util/dist/__webpack \
+            packages/qw-page/dist packages/wcag-techniques/dist/__webpack \
+            -maxdepth 1 -name '*.LICENSE.txt' -type f \
+            -exec cp -t .agents/tmp/qualweb-bundles {} +
+          printf '%s\n' "$GITHUB_SHA" > .agents/tmp/qualweb-bundles/SOURCE.txt
+          python3 -m zipfile -c ".agents/tmp/qualweb-bundles-$GITHUB_SHA.zip" .agents/tmp/qualweb-bundles/*
+          python3 -m zipfile -t ".agents/tmp/qualweb-bundles-$GITHUB_SHA.zip"
+
+      - name: Publish bundle prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          tag="qautomate-$GITHUB_RUN_NUMBER-$GITHUB_RUN_ATTEMPT"
+          cat > .agents/tmp/release-notes.md <<EOF
+          Extension bundles built from the qautomate branch.
+
+          Source: https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA
+          Build: https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT
+
+          The ZIP contains act.js, util.js, qwPage.js, wcag.js, LICENSE,
+          SOURCE.txt (the source commit), and any emitted third-party license files.
+          All packages were built, the article accessible-name and selector-consumer
+          regression suite passed, and the four bundles passed syntax checks.
+
+          Extract the ZIP and copy its JavaScript files into QAutoEQual's
+          src/chrome-extension directory. Retain the license files when redistributing.
+          EOF
+          gh release create "$tag" ".agents/tmp/qualweb-bundles-$GITHUB_SHA.zip" \
+            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --prerelease --latest=false --title "QAutomate bundles $tag" \
+            --notes-file .agents/tmp/release-notes.md
