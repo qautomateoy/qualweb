@@ -66,9 +66,10 @@ class AccessibilityUtils {
   public static getAccessibleNameRecursion(
     element: QWElement,
     recursion: boolean,
-    isWidget: boolean
+    isWidget: boolean,
+    includeHidden: boolean = false
   ): string | undefined {
-    return getAccessibleNameRecursionFunction(element, recursion, isWidget);
+    return getAccessibleNameRecursionFunction(element, recursion, isWidget, includeHidden);
   }
 
   @Cache('AcceUtils.getAccessibleNameSelector')

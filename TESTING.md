@@ -17,6 +17,27 @@ Many tests in the evaluation modules (@qualweb/act-rules, @qualweb/best-practice
 intentional, as the testing framework works well to manage this kind of test as
 well.
 
+## Article accessible-name regressions
+
+The focused suite in `packages/act-rules/test/article-accessible-name.spec.ts`
+checks article name recursion, exact contributing source selectors, exclusion of
+hidden children versus retention of presentational text, nested directly referenced
+hidden labels, hidden-reference cache isolation, naming precedence, and the
+R12/R37/R76 rule results. It uses local HTML in Puppeteer; no live website
+or external test-case download is needed. Install dependencies and Puppeteer's
+Chrome before running it.
+
+From the repository root, rebuild the changed utility and ACT rule bundles:
+
+```sh
+npm run build --workspace=@qualweb/util --workspace=@qualweb/act-rules
+cd packages/act-rules
+npx mocha --no-config --require ts-node/register test/article-accessible-name.spec.ts
+```
+
+`--no-config` avoids loading the broader validation suite, which fetches remote
+test cases. The test is also included in the package's normal test discovery.
+
 ## Mocha in VSCode
 
 The extension [Mocha Test Explorer](https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-mocha-test-adapter)
