@@ -87,13 +87,7 @@ const nameCases: NameCase[] = [
   }
 ];
 
-for (const attributes of [
-  'aria-hidden="true"',
-  'hidden',
-  'style="display:none"',
-  'role="presentation"',
-  'role="none"'
-]) {
+for (const attributes of ['aria-hidden="true"', 'hidden', 'style="display:none"']) {
   nameCases.push({
     title: `exclude children with ${attributes}`,
     html: `<a id="target" href="#"><article id="excluded" ${attributes}>Excluded</article></a>`,
@@ -102,12 +96,95 @@ for (const attributes of [
   });
 }
 
+for (const role of ['presentation', 'none']) {
+  nameCases.push(
+    {
+      title: `retain own text of ${role} descendants`,
+      html: `<a id="target" href="#"><article id="source" role="${role}">Retained</article></a>`,
+      name: 'Retained',
+      sources: ['source']
+    },
+    {
+      title: `retain nested text of ${role} descendants`,
+      html: `<a id="target" href="#"><article role="${role}"><div><span id="source">Retained</span><span hidden>Excluded</span></div></article></a>`,
+      name: 'Retained',
+      sources: ['source']
+    },
+    {
+      title: `standalone ${role} elements remain unnamed`,
+      html: `<article id="target" role="${role}">Retained</article>`,
+      name: '',
+      sources: []
+    },
+    {
+      title: `presentational ${role} figures retain content without a caption`,
+      html: `<a id="target" href="#"><article><figure role="${role}"><span id="source">Retained</span></figure></article></a>`,
+      name: 'Retained',
+      sources: ['source']
+    }
+  );
+}
+
 for (const attributes of ['aria-hidden="true"', 'hidden', 'style="display:none"']) {
   nameCases.push({
     title: `directly referenced labels with ${attributes}`,
     html: `<a id="target" href="#" aria-labelledby="source" aria-label="Ignored"><article>Ignored</article></a><article id="source" ${attributes}>Referenced label</article>`,
     name: 'Referenced label',
     sources: ['source']
+  });
+  nameCases.push(
+    {
+      title: `nested directly referenced labels with ${attributes}`,
+      html: `<button id="target" aria-labelledby="label"></button><article id="label" ${attributes}><div><span id="source">Referenced label</span></div></article>`,
+      name: 'Referenced label',
+      sources: ['source']
+    },
+    {
+      title: `explicitly hidden descendants of referenced labels with ${attributes}`,
+      html: `<button id="target" aria-labelledby="label"></button><article id="label" ${attributes}><span id="source" hidden>Referenced label</span></article>`,
+      name: 'Referenced label',
+      sources: ['source']
+    }
+  );
+}
+
+nameCases.push(
+  {
+    title: 'visible referenced labels still exclude hidden descendants',
+    html: '<button id="target" aria-labelledby="label"></button><article id="label"><span id="source">Visible</span><span hidden>Excluded</span></article>',
+    name: 'Visible',
+    sources: ['source']
+  },
+  {
+    title: 'visible referenced labels with only hidden descendants have no source',
+    html: '<button id="target" aria-labelledby="label"></button><article id="label"><span hidden>Excluded</span></article>',
+    name: '',
+    sources: []
+  },
+  {
+    title: 'inherited hiding of a referenced label retains its descendants',
+    html: '<button id="target" aria-labelledby="label"></button><div hidden><article id="label"><span id="source">Referenced label</span></article></div>',
+    name: 'Referenced label',
+    sources: ['source']
+  },
+  {
+    title: 'hidden-reference context does not leak into another reference',
+    html: '<button id="target" aria-labelledby="hidden-label visible-label"></button><article id="hidden-label" hidden><span id="first">First</span></article><article id="visible-label"><span id="second">Second</span><span hidden>Excluded</span></article>',
+    name: 'First Second',
+    sources: ['first', 'second']
+  }
+);
+
+for (const [container, caption] of [
+  ['figure', 'figcaption'],
+  ['table', 'caption'],
+  ['fieldset', 'legend']
+]) {
+  nameCases.push({
+    title: `hidden referenced ${caption} retains every contributing source`,
+    html: `<button id="target" aria-labelledby="label"></button><article id="label" aria-hidden="true"><${container}><${caption}><span id="first">First</span><span id="second">Second</span></${caption}></${container}></article>`,
+    name: /^First\s*Second$/,
+    sources: ['first', 'second']
   });
 }
 
@@ -157,9 +234,28 @@ describe('Article accessible names', function () {
     });
   }
 
+  for (const firstIncludeHidden of [false, true]) {
+    it(`keeps hidden-reference cache context separate when starting with ${firstIncludeHidden}`, async () => {
+      await loadHtml('<article id="label" hidden><div><span>Referenced label</span></div></article>');
+      const names = await page.evaluate((firstIncludeHidden) => {
+        const element = window.qwPage.getElementByID('label');
+        if (!element) throw new Error('Missing label element');
+        return [firstIncludeHidden, !firstIncludeHidden, firstIncludeHidden].map(
+          (includeHidden) =>
+            window.AccessibilityUtils.getAccessibleNameRecursion(element, true, false, includeHidden) ?? ''
+        );
+      }, firstIncludeHidden);
+      expect(names).to.deep.equal(
+        [firstIncludeHidden, !firstIncludeHidden, firstIncludeHidden].map((includeHidden) =>
+          includeHidden ? 'Referenced label' : ''
+        )
+      );
+    });
+  }
+
   it('R12 passes article links and fails hidden-only links', async () => {
     await loadHtml(
-      '<a id="named" href="#"><article><div><h3>Article title</h3></div></article></a><a id="empty" href="#"><article hidden>Excluded</article></a>'
+      '<a id="named" href="#"><article><div><h3>Article title</h3></div></article></a><a id="empty" href="#"><article hidden>Excluded</article></a><a id="presentational" href="#"><article role="none">Retained</article></a><a id="referenced" href="#" aria-labelledby="label"></a><article id="label" hidden><span>Referenced label</span></article>'
     );
     const results = await page.evaluate(() => {
       const runner = new ACTRulesRunner({ include: ['QW-ACT-R12'] }, 'en');
@@ -174,7 +270,9 @@ describe('Article accessible names', function () {
     });
     expect(results).to.have.deep.members([
       { id: 'named', verdict: 'passed' },
-      { id: 'empty', verdict: 'failed' }
+      { id: 'empty', verdict: 'failed' },
+      { id: 'presentational', verdict: 'passed' },
+      { id: 'referenced', verdict: 'passed' }
     ]);
   });
 
@@ -184,9 +282,10 @@ describe('Article accessible names', function () {
         <style>body { background: white; } h3, span, article, p { color: #aaa; background: white; }</style>
         <a href="#" aria-disabled="true"><article><div>
           <h3 id="inactive">Disabled article heading</h3>
+          <article role="presentation"><span id="presentational">Presentational name source</span></article>
           <span id="excluded" aria-hidden="true">Visible text excluded from the name</span>
         </div></article></a>
-        <article id="reference" aria-hidden="true">Hidden referenced label</article>
+        <article id="reference" aria-hidden="true"><span id="reference-text">Hidden referenced label</span><figure><figcaption><span id="caption-first">First</span><span id="caption-second">Second</span></figcaption></figure></article>
         <button disabled aria-labelledby="reference"></button>
         <p id="control">Visible text with insufficient contrast</p>
       `);
@@ -203,6 +302,10 @@ describe('Article accessible names', function () {
       }, rule);
       expect(results.map((result) => result.id)).not.to.include('inactive');
       expect(results.map((result) => result.id)).not.to.include('reference');
+      expect(results.map((result) => result.id)).not.to.include('reference-text');
+      expect(results.map((result) => result.id)).not.to.include('presentational');
+      expect(results.map((result) => result.id)).not.to.include('caption-first');
+      expect(results.map((result) => result.id)).not.to.include('caption-second');
       expect(results).to.have.deep.members([
         { id: 'excluded', verdict: 'failed' },
         { id: 'control', verdict: 'failed' }

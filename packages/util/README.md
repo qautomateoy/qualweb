@@ -16,12 +16,23 @@ including article descendants and generic wrappers. This retains their source
 selectors for consumers such as the disabled-widget checks in QW-ACT-R37 and
 QW-ACT-R76.
 
-Selector child traversal excludes hidden and presentational descendants, matching
-the name calculation. Direct `aria-labelledby` references can still use hidden
-label elements. Content-derived selectors include all contributing descendants
+Both calculations exclude hidden children during ordinary content traversal.
+The `presentation` and `none` roles do not hide an article's text: its own text
+and non-hidden descendants still contribute to its enclosing link's name.
+Direct `aria-labelledby` references to hidden labels include nested descendants,
+even if those descendants are also hidden. A visible referenced label still
+excludes its hidden descendants. This hidden-reference context is separate for
+each reference and is included in the recursive name cache key.
+
+Selectors for `aria-labelledby`, captions, and legends identify all contributing
+text sources, not merely the referenced wrapper or first child. Content-derived
+selectors include all contributing descendants
 and the element's own or CSS-generated text, rather than only the first child or
 its wrapper.
 Whitespace-only `aria-label` values do not override those content sources.
+
+These distinctions follow the [presentation role](https://www.w3.org/TR/wai-aria-1.2/#presentation)
+and the [hidden-reference computation rules](https://www.w3.org/TR/accname-1.2/#computation-steps).
 
 This local behavior can differ from Chromium's accessibility tree. A passing
 QualWeb result does not establish that the link is named in every browser and

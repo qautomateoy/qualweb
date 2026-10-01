@@ -20,9 +20,10 @@ well.
 ## Article accessible-name regressions
 
 The focused suite in `packages/act-rules/test/article-accessible-name.spec.ts`
-checks article name recursion, exact contributing source selectors, hidden and
-presentational children, directly referenced hidden labels, naming precedence,
-and the R12/R37/R76 rule results. It uses local HTML in Puppeteer; no live website
+checks article name recursion, exact contributing source selectors, exclusion of
+hidden children versus retention of presentational text, nested directly referenced
+hidden labels, hidden-reference cache isolation, naming precedence, and the
+R12/R37/R76 rule results. It uses local HTML in Puppeteer; no live website
 or external test-case download is needed. Install dependencies and Puppeteer's
 Chrome before running it.
 
